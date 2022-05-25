@@ -127,10 +127,15 @@ export const LotteryProvider = ({children}) => {
             //     }]
             // });
             
+            //const getAllowance = await lotteryContract.prizeAmount();
+            //await getPrizeAmount.wait();
+            //console.log(`Prize amount before: ${getPrizeAmount}`);
+
             const approval = await tokenContract.approve(contractAddress2, amount);
             await approval.wait();
-            console.log(`Approval : ${approval}`)
+            console.log(`Approval : approved!`)
             const lotteryHash = await lotteryContract.joinLottery(tokenAddress_test, amount);
+            //const balance = await lotteryContract.balance();
             
             setIsLoading(true);
             console.log(`Loading - ${lotteryHash.hash}`);
@@ -141,6 +146,9 @@ export const LotteryProvider = ({children}) => {
             const getPrizeAmount = await lotteryContract.prizeAmount();
             //await getPrizeAmount.wait();
             console.log(`Prize amount: ${getPrizeAmount}`);
+            
+            const supply = await tokenContract.totalSupply();
+            console.log(`Total supply: ${supply}`);
 
             //const transactionCount = await lotteryContract.getTransactionCount();
             //setTransactionCount(transactionCount.toNumber());

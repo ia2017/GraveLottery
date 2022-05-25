@@ -2,7 +2,9 @@
 
 pragma solidity ^0.8.0;
 
+//import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
 
 contract LotteryToken {
@@ -20,6 +22,8 @@ contract LotteryToken {
     //uint256 private lotteryRoundTime;
     uint256 private minRoundPlayers;
     address public owner;
+    ERC20Burnable token;
+    //uint256 public balance;
 
     /* Events */
     event PlayerJoined(
@@ -41,7 +45,7 @@ contract LotteryToken {
     /** 
         Constructor function only stores the timestamp
     */
-    constructor() {
+    constructor(address token_) {
         owner = msg.sender;
 
         //lastTime = block.timestamp;
@@ -49,6 +53,7 @@ contract LotteryToken {
         currentRound = 1;
         ticketPrice = 1;
         minRoundPlayers = 5;
+        token = ERC20Burnable(token_);
     }
 
 
@@ -63,6 +68,11 @@ contract LotteryToken {
         // Enter Lottery
         enterLottery(msg.sender, _token, _amount);
     }
+
+    // function tokenBalance(address _token) public view returns(uint256 balance) {
+    //     balance = IERC20(_token).balanceOf(address(this));
+    //     return balance;
+    // }
 
     /**
        Gift a the Lottery entry
@@ -85,7 +95,7 @@ contract LotteryToken {
         // Add the address entry as a player
         players.push(_entry);
         // Update prize Amount
-        prizeAmount = prizeAmount + _amount;
+        prizeAmount = IERC20(_token).balanceOf(address(this));
 
         // Emit event
         emit PlayerJoined(
@@ -113,11 +123,18 @@ contract LotteryToken {
         // Pick a pseudo-random winner
         uint256 ticketIndex = random() % players.length;
         address winner = players[ticketIndex];
-        
-        // Deduct burn amount from prize amount
 
-        // Burn 20% of prize amount
-        //_burn(msg.sender, _shares);
+        // Burn Amount
+        uint256 burnAmount = 1;
+
+        // Approve burn
+        token.approve(address(this), burnAmount);
+
+        // Burn
+        token.burnFrom(address(this), burnAmount);
+
+        // Deduct
+        prizeAmount = prizeAmount - burnAmount;
 
         // Transfer remaining funds
         IERC20(_token).transfer(winner, prizeAmount);

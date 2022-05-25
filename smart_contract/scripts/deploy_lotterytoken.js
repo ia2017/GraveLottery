@@ -1,8 +1,8 @@
 const main = async () => {
  
+  const tokenAddress = "0x1C20304753167E0fabe0aC3Aad3e2f18bDa5A3BD";
   const LotteryToken = await hre.ethers.getContractFactory("LotteryToken");
-  const lotterytoken = await LotteryToken.deploy();
-
+  const lotterytoken = await LotteryToken.deploy(tokenAddress);
   await lotterytoken.deployed();
 
   console.log("Lottery Token deployed to:", lotterytoken.address);

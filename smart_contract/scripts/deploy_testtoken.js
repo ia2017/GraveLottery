@@ -1,6 +1,6 @@
 const main = async () => {
  
-  const TestToken = await hre.ethers.getContractFactory("SomeCoin");
+  const TestToken = await hre.ethers.getContractFactory("GraveTestToken");
   const testtoken = await TestToken.deploy();
 
   await testtoken.deployed();

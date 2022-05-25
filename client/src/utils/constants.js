@@ -7,6 +7,7 @@ export const contractABI = abi.abi;
 export const contractAddress = '0xf3F7733D5336CFFb9F453944162ECc314e7F3FF2'; //Goerli
 
 // For token
-export const contractAddress2 = '0x7113aC2D18C3D0c80d4470357a04B348c50E189D'; // Rinkeby
-
-export const tokenAddress_test = '0x89311976D2e08411352796856cf26B35939c608c'; // somecoin - rinkeby
+export const contractAddress2 = '0xCC6f2BDA5B392C5Ac5612C900547FF9315Eacd98'; // Rinkeby
+// 0x27cAd22162E3765b47290EFA45d2bbcb26468727 - no burn
+// 0xCC6f2BDA5B392C5Ac5612C900547FF9315Eacd98 burn
+export const tokenAddress_test = '0x1C20304753167E0fabe0aC3Aad3e2f18bDa5A3BD'; // GTS - rinkeby
