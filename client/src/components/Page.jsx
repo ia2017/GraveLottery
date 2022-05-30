@@ -19,7 +19,7 @@ const Input = ( { placeholder, name, type, value, handleChange } ) => (
 
 const Page = () => {
 
-    const { connectWallet, currentAccount, formData, enterLottery, handleChange } = useContext(LotteryContext);
+    const { connectWallet, currentAccount, formData, setFormData, handleChange, enterLottery, changeVar } = useContext(LotteryContext);
 
 
     const handleSubmit = (e) => {
@@ -31,6 +31,18 @@ const Page = () => {
 		
 		enterLottery();
         console.log("Lottery entered")
+
+    }
+
+    const handleSubmitVar = (e) => {
+        const { amount } = formData;
+
+		e.preventDefault();
+
+		if( !amount  ) return;
+		
+		changeVar();
+        console.log("Variable change initiated")
 
     }
 
@@ -62,7 +74,27 @@ const Page = () => {
             )}
         </div>
 
+        <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
+            <Input placeholder="No. of players" name="amount" type="text" handleChange={handleChange} />
+            <div className="h-[1px] w-full bg-gray-400 my-2" />
+
+            {false ? (
+                <Loader />
+            ) : (
+                <button
+                    type="button"
+                    onClick={handleSubmitVar}
+                    className="text-black w-full mt-2 border-[1px] p-2 border-[#3d4f7c] rounder-full cursor-pointer"
+                >
+                    Change variable
+                </button>
+            )}
         </div>
+
+        </div>
+
+        
+        
     );
 }
 

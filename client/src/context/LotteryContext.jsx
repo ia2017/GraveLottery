@@ -46,6 +46,7 @@ export const LotteryProvider = ({children}) => {
     const [currentAccount, setCurrentAccount] = useState('');
     //const [defaultAccount, setDefaultAccount] = useState(null);
     const [formData, setFormData] = useState({ amount: '' });
+    //const [formDataVar, setFormDataVar] = useState({ amount: '' });
     const [isLoading, setIsLoading] = useState(false);
     //const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount')); // store it on local storage since it resets everytime u refresh
 
@@ -64,8 +65,7 @@ export const LotteryProvider = ({children}) => {
             if (accounts.length){
 
                 setCurrentAccount(accounts[0]);
-                //accountChangedHandler(accounts[0]);
-                // getAllTransactions();
+                
             } else {
                 console.log(error)
                 throw new Error("No ethereum object.")
@@ -92,10 +92,6 @@ export const LotteryProvider = ({children}) => {
             console.log(accounts[0]);
 
             setCurrentAccount(accounts[0]);
-            //accountChangedHandler(accounts[0]);
-            //setCurrentAccount(accounts[0]);
-            //await activate(injected)
-            //window.location.reload();
             
         } catch (error) {
             console.log(error)
@@ -134,9 +130,9 @@ export const LotteryProvider = ({children}) => {
             const approval = await tokenContract.approve(contractAddress2, amount);
             await approval.wait();
             console.log(`Approval : approved!`)
-            const lotteryHash = await lotteryContract.joinLottery(tokenAddress_test, amount);
+
+            const lotteryHash = await lotteryContract.joinLottery(amount);
             //const balance = await lotteryContract.balance();
-            
             setIsLoading(true);
             console.log(`Loading - ${lotteryHash.hash}`);
             await lotteryHash.wait();
@@ -158,12 +154,48 @@ export const LotteryProvider = ({children}) => {
         }
     }
 
+    const changeVar = async () => {
+        try{
+            if(!ethereum) return alert("Please install metamask");
+            const { amount } = formData;
+            const lotteryContract = getEthereumContract();
+            const tokenContract = getTokenContract();
+
+            // const players = await lotteryContract.setMinRoundPlayers(amount);
+            // await players.wait();
+            // const nplayers = await lotteryContract.getMinRoundPlayers();
+
+            var round = await lotteryContract.startRound();
+
+                if (round == true) {
+                    round = false;
+                } else {
+                    round = true;
+                }
+
+            const start = await lotteryContract.setStartRound(round);
+            await start.wait();
+            const cround = await lotteryContract.startRound();
+            const nround = await lotteryContract.startNextRound();
+
+
+            //console.log(`Players changed to: ${nplayers}`);
+            console.log(`Current round: ${cround}`);
+            console.log(`Next round: ${nround}`);
+
+
+
+        }catch (error){
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         checkIfWalletIsConnected();
     }, []);
 
     return (
-        <LotteryContext.Provider value={{ connectWallet, currentAccount, formData, setFormData, handleChange, enterLottery }}>
+        <LotteryContext.Provider value={{ connectWallet, currentAccount, formData, setFormData, handleChange, enterLottery, changeVar }}>
             {children}
         </LotteryContext.Provider>
     );
