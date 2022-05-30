@@ -3,7 +3,7 @@ Token lottery smart contract for Grave tokens.
 
 Test contract deployed to Rinkeby network.
 
-Run client with npm run dev.
+Run client in the client directory with **npm run dev**.
 
 Open UI at http://localhost:3000/.
 
